@@ -1,75 +1,86 @@
 R1-Core
 enable
 configure terminal
-ip route 0.0.0.0 0.0.0.0 172.16.10.166
+ip route 0.0.0.0 0.0.0.0 172.26.10.166
 router ospf 1
-router-id 1.1.1.1
-auto-cost reference-bandwidth 10000 passive-interface default
-no passive-interface Ethernet0/0 no passive-interface Ethernet0/1 no passive-interface Serial1/0
-network 172.16.10.160 0.0.0.3 area 0
-network 172.16.10.168 0.0.0.3 area 0
-network 172.16.10.172 0.0.0.3 area 0 default-information originate
+ router-id 1.1.1.1
+ auto-cost reference-bandwidth 10000
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Serial1/0
+ network 172.26.10.160 0.0.0.3 area 0
+ network 172.26.10.168 0.0.0.3 area 0
+ network 172.26.10.172 0.0.0.3 area 0
+ default-information originate
 exit
 interface Ethernet0/0
-ip ospf network point-to-point interface Ethernet0/1
-ip ospf network point-to-point end
+ ip ospf network point-to-point
+interface Ethernet0/1
+ ip ospf network point-to-point
+end
 write memory
-
 R2
 enable
-configure terminal router ospf 1
-router-id 2.2.2.2
-auto-cost reference-bandwidth 10000 passive-interface default
-no passive-interface Serial1/0
-network 172.16.10.160 0.0.0.3 area 0
-network 172.16.9.0 0.0.0.127 area 0
-network 172.16.9.128 0.0.0.127 area 0
-network 172.16.10.0 0.0.0.63 area 0
-network 172.16.10.144 0.0.0.15 area 0 end
+configure terminal
+router ospf 1
+ router-id 2.2.2.2
+ auto-cost reference-bandwidth 10000
+ passive-interface default
+ no passive-interface Serial1/0
+ network 172.26.10.160 0.0.0.3 area 0
+ network 172.26.9.0 0.0.0.127 area 0
+ network 172.26.9.128 0.0.0.127 area 0
+ network 172.26.10.0 0.0.0.63 area 0
+ network 172.26.10.144 0.0.0.15 area 0
+end
 write memory
-
-
 SWM1
 enable
-configure terminal router ospf 1
-router-id 3.3.3.3
-auto-cost reference-bandwidth 10000 passive-interface default
-no passive-interface Ethernet0/0
-network 172.16.10.168 0.0.0.3 area 0
-network 172.16.0.0 0.0.7.255 area 0
-
-network 172.16.8.0 0.0.0.255 area 0
-network 172.16.10.64 0.0.0.31 area 0
-network 172.16.10.96 0.0.0.31 area 0
-network 172.16.10.128 0.0.0.15 area 0 exit
+configure terminal
+router ospf 1
+ router-id 3.3.3.3
+ auto-cost reference-bandwidth 10000
+ passive-interface default
+ no passive-interface Ethernet0/0
+ network 172.26.10.168 0.0.0.3 area 0
+ network 172.26.0.0 0.0.7.255 area 0
+ network 172.26.8.0 0.0.0.255 area 0
+ network 172.26.10.64 0.0.0.31 area 0
+ network 172.26.10.96 0.0.0.31 area 0
+ network 172.26.10.128 0.0.0.15 area 0
+exit
 interface Ethernet0/0
-ip ospf network point-to-point end
+ ip ospf network point-to-point
+end
 write memory
-
-
 SWM2
 enable
-configure terminal router ospf 1
-router-id 4.4.4.4
-auto-cost reference-bandwidth 10000 passive-interface default
-no passive-interface Ethernet0/0
-network 172.16.10.172 0.0.0.3 area 0
-network 172.16.0.0 0.0.7.255 area 0
-network 172.16.8.0 0.0.0.255 area 0
-network 172.16.10.64 0.0.0.31 area 0
-network 172.16.10.96 0.0.0.31 area 0
-network 172.16.10.128 0.0.0.15 area 0 exit
+configure terminal
+router ospf 1
+ router-id 4.4.4.4
+ auto-cost reference-bandwidth 10000
+ passive-interface default
+ no passive-interface Ethernet0/0
+ network 172.26.10.172 0.0.0.3 area 0
+ network 172.26.0.0 0.0.7.255 area 0
+ network 172.26.8.0 0.0.0.255 area 0
+ network 172.26.10.64 0.0.0.31 area 0
+ network 172.26.10.96 0.0.0.31 area 0
+ network 172.26.10.128 0.0.0.15 area 0
+exit
 interface Ethernet0/0
-
-ip ospf network point-to-point end
+ ip ospf network point-to-point
+end
 write memory
 
 
-Verificación
-show ip ospf neighbor show ip route ospf
+
+
+VerificaciÃ³n
+show ip ospf neighbor
+show ip route ospf
 show ip protocols
 show ip ospf interface brief
-
-
 Solo en R1-Core y R2
 show ip route 0.0.0.0
