@@ -1,0 +1,119 @@
+SWM1
+enable
+configure terminal
+interface range Ethernet0/2 - 3
+channel-group 1 mode active
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk native vlan 999
+switchport trunk allowed vlan 10,20,30,40,901,999
+no shutdown
+exit
+spanning-tree mode rapid-pvst
+spanning-tree vlan 10,20 root primary
+spanning-tree vlan 30,40 root secondary
+interface Vlan10
+ip address 172.26.8.2 255.255.255.0
+standby 10 ip 172.26.8.1
+standby 10 priority 110
+standby 10 preempt
+exit
+interface Vlan20
+ip address 172.26.0.2 255.255.248.0
+standby 20 ip 172.26.0.1
+standby 20 priority 110
+standby 20 preempt
+exit
+interface Vlan30
+ip address 172.26.10.66 255.255.255.192
+standby 30 ip 172.26.10.65
+standby 30 priority 90
+standby 30 preempt
+exit
+interface Vlan40
+ip address 172.26.10.130 255.255.255.224
+standby 40 ip 172.26.10.129
+standby 40 priority 90
+standby 40 preempt
+exit
+ip access-list standard ADMIN_ACCESO
+permit 172.26.10.64 0.0.0.63
+deny any
+exit
+line vty 0 4
+access-class ADMIN_ACCESO in
+exit
+line vty 5 15
+access-class ADMIN_ACCESO in
+exit
+ip access-list extended SEC_ESTUDIANTES
+deny ip 172.26.0.0 0.0.7.255 172.26.9.128 0.0.0.127
+deny ip 172.26.0.0 0.0.7.255 172.26.10.0 0.0.0.63
+permit ip any any
+exit
+interface Vlan20
+ip access-group SEC_ESTUDIANTES in
+exit
+end
+write memory
+
+SWM2
+enable
+configure terminal
+interface range Ethernet0/2 - 3
+channel-group 1 mode active
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk native vlan 999
+switchport trunk allowed vlan 10,20,30,40,901,999
+no shutdown
+exit
+spanning-tree mode rapid-pvst
+spanning-tree vlan 30,40 root primary
+spanning-tree vlan 10,20 root secondary
+interface Vlan10
+standby 10 ip 172.26.8.1
+standby 10 priority 90
+standby 10 preempt
+exit
+interface Vlan20
+standby 20 ip 172.26.0.1
+standby 20 priority 90
+standby 20 preempt
+exit
+interface Vlan30
+standby 30 ip 172.26.10.65
+standby 30 priority 110
+standby 30 preempt
+exit
+interface Vlan40
+standby 40 ip 172.26.10.129
+standby 40 priority 110
+standby 40 preempt
+exit
+ip access-list standard ADMIN_ACCESO
+permit 172.26.10.64 0.0.0.63
+deny any
+exit
+line vty 0 4
+access-class ADMIN_ACCESO in
+exit
+line vty 5 15
+access-class ADMIN_ACCESO in
+exit
+ip access-list extended SEC_ESTUDIANTES
+deny ip 172.26.0.0 0.0.7.255 172.26.9.128 0.0.0.127
+deny ip 172.26.0.0 0.0.7.255 172.26.10.0 0.0.0.63
+permit ip any any
+exit
+interface Vlan20
+ip access-group SEC_ESTUDIANTES in
+exit
+end
+write memory
+
+Verificación (en cada equipo)
+show standby brief
+show etherchannel summary
+show spanning-tree
+show access-lists
